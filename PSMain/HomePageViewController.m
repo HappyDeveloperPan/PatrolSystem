@@ -236,12 +236,6 @@
         [RXApiServiceEngine requestWithType:RequestMethodTypePost url:kUrl_StartTask parameters:parameters completionHanlder:^(id jsonData, NSError *error) {
             if (jsonData) {
                 if ([jsonData[@"resultnumber"] intValue] == 200) {
-//                    SecurityModel *model = [SecurityModel parse:jsonData[@"result"]];
-//                    if (model.isEnter) {
-//                        [kMainWindow showWarning:@"任务开始"];
-//                    }else {
-//                        [kMainWindow showWarning:[NSString stringWithFormat:@"未到任务地点,距离%d米", model.distance]];
-//                    }
                     [kMainWindow showWarning:@"任务开始"];
                 }else {
                     [self.view showWarning:jsonData[@"cause"]];

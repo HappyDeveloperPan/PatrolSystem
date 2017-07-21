@@ -1,0 +1,169 @@
+//
+//  LZBCalendarDateCell.m
+//  LZBCalendar
+//
+//  Created by zibin on 16/11/13.
+//  Copyright © 2016年 apple. All rights reserved.
+//
+
+#import "LZBCalendarDateCell.h"
+
+#define animation_Duration 0.25
+
+@interface LZBCalendarDateCell()
+
+
+
+@property (nonatomic, assign) CGFloat dateLableHeight;
+@property (nonatomic, assign) CGFloat descLabelHeiht;
+@end
+
+@implementation LZBCalendarDateCell
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if(self = [super initWithFrame:frame])
+  {
+      self.contentView.backgroundColor = [UIColor whiteColor];
+      [self.contentView addSubview:self.dateLabel];
+      [self.contentView addSubview:self.descLabel];
+  }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    if(self.dateLableHeight > 0)
+    {
+        self.dateLabel.center = CGPointMake(width*0.5, height*0.5 - self.dateLableHeight*0.5-self.style.dateTitleDescOffset.vertical * 0.5);
+        self.dateLabel.bounds = CGRectMake(0, 0, width, self.dateLableHeight);
+    }
+    if(self.descLabelHeiht > 0)
+    {
+        self.descLabel.center = CGPointMake(width*0.5, height*0.5 + self.descLabelHeiht*0.5+self.style.dateTitleDescOffset.vertical * 0.5);
+        self.descLabel.bounds = CGRectMake(0, 0, width, self.descLabelHeiht);
+        self.descLabel.adjustsFontSizeToFitWidth = YES;
+        self.descLabel.minimumScaleFactor = .6;
+    }
+    
+}
+
+
+
+#pragma mark- API
+- (void)setStyle:(LZBCalendarAppearStyle *)style
+{
+    _style = style;
+    self.dateLableHeight = [@"1" sizeWithAttributes:@{NSFontAttributeName : style.dateTittleFont}].height;
+    self.descLabelHeiht = [@"1" sizeWithAttributes:@{NSFontAttributeName : style.dateDescFont}].height;
+    self.dateLabel.font = style.dateTittleFont;
+    self.dateLabel.textColor = self.isSelected?style.dateTittleSelectColor:style.dateTittleUnselectColor;
+    self.descLabel.font = style.dateDescFont;
+    self.descLabel.textColor = self.isSelected?style.dateDescSelectColor:style.dateDescUnselectColor;
+    
+}
+
+- (void)reloadCellDataWithTitle:(NSString *)title
+{
+    self.dateLabel.text = title.length > 0 ? title : @"";
+}
+
+- (void)reloadCellDataWithSubtitle:(NSString *)subtitle
+{
+//    if ([subtitle isEqualToString:@"正常"] || [subtitle isEqualToString:@"请假"] || [subtitle isEqualToString:@"出差"]) {
+//        self.descLabel.textColor = kColorGreen;
+//    }else if ([subtitle isEqualToString:@"缺勤"]) {
+//        self.descLabel.textColor = KcolorRed;
+//    }else if([subtitle isEqualToString:@"迟到早退"]){
+////        self.descLabel.font = [UIFont systemFontOfSize:12];
+//        self.descLabel.textColor = RGBColor(248, 200, 3);
+//    }else {
+//        self.descLabel.textColor = RGBColor(128, 128, 0);
+//    }
+    self.descLabel.text = subtitle.length > 0 ? subtitle : @"";
+}
+
+- (void)reloadSubtitleColorWithColor:(UIColor *)color {
+   self.descLabel.textColor = color;
+}
+
+- (void)reloadCellDataWithTitle :(NSString *)title  subTitle:(NSString *)subtitle
+{
+    [self reloadCellDataWithTitle:title];
+    [self reloadCellDataWithSubtitle:subtitle];
+}
+
+- (void)updateCellSelectBackgroundColor
+{
+    self.contentView.backgroundColor = self.isSelected?self.style.dateBackSelectColor:self.style.dateBackUnselectColor;
+}
+- (void)updateCellSelectTitleColor
+{
+     self.dateLabel.textColor = self.isSelected?self.style.dateTittleSelectColor:self.style.dateTittleUnselectColor;
+}
+- (void)updateCellSelectSubtitleColor
+{
+    if (self.style.dateDescUnselectColor && self.style.dateDescSelectColor) {
+        self.descLabel.textColor = self.isSelected?self.style.dateDescSelectColor:self.style.dateDescUnselectColor;
+    }
+//   self.descLabel.textColor = self.isSelected?self.style.dateDescSelectColor:self.style.dateDescUnselectColor;
+}
+- (void)updateCellSelectCellColor
+{
+    [self updateCellSelectCellColorWithAnimation:NO];
+}
+
+- (void)updateCellSelectCellColorWithAnimation:(BOOL)animation
+{
+    if(animation)
+    {
+        [self addAnimationToView:self];
+    }
+    [self updateCellSelectTitleColor];
+    [self updateCellSelectSubtitleColor];
+    [self updateCellSelectBackgroundColor];
+    
+}
+
+
+
+
+#pragma mark - handle
+
+- (void)addAnimationToView:(UIView *)animationView
+{
+    CAKeyframeAnimation *keyAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+    keyAnimation.values = @[@0.8,@1.0,@1.2,@1.1,@1.0];
+    keyAnimation.duration = animation_Duration;
+    [animationView.layer addAnimation:keyAnimation forKey:@"scale"];
+}
+- (NSDateComponents *)getDateComponentsFromDate:(NSDate *)date
+{
+    NSDateComponents *component = [[NSCalendar currentCalendar] components:
+                                   (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:date];
+    return component;
+}
+
+#pragma mark - lazy
+- (UILabel *)dateLabel
+{
+  if(_dateLabel == nil)
+  {
+      _dateLabel = [UILabel new];
+      _dateLabel.textAlignment = NSTextAlignmentCenter;
+  }
+    return _dateLabel;
+}
+
+- (UILabel *)descLabel
+{
+  if(_descLabel == nil)
+  {
+      _descLabel = [UILabel new];
+      _descLabel.textAlignment = NSTextAlignmentCenter;
+  }
+    return _descLabel;
+}
+@end

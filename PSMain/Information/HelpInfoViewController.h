@@ -16,4 +16,5 @@ typedef NS_ENUM(NSUInteger, InfoType) {
 @interface HelpInfoViewController : UIViewController
 @property (nonatomic, assign) NSInteger notiNumber;
 @property (nonatomic, assign) InfoType infoType;
+@property (nonatomic, assign) int topHeight;
 @end

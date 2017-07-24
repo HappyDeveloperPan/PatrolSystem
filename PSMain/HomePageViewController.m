@@ -584,8 +584,10 @@
                         if (self.workType == 2) {
                             CleaningAreaModel *clea = [CleaningAreaModel parse:model];
                             [self.pickArr addObject:clea.cleaningArea.cleaning_area_name];
-//                            [self.lineIdArr addObject:clea.cleaningArea.cleaning_area_id];
+////                            [self.lineIdArr addObject:clea.cleaningArea.cleaning_area_id];
                             [self.lineIdArr addObject:[NSNumber numberWithInteger:clea.cleaningArea.cleaning_area_id]];
+//                            [self.pickArr addObject:clea.cleaning_area_name];
+//                            [self.lineIdArr addObject:[NSNumber numberWithInteger:clea.cleaning_area_id]];
                         }
                         //摆渡车
                         if (self.workType == 3) {
@@ -904,6 +906,7 @@
         if (jsonData) {
             if ([jsonData[@"resultnumber"] intValue] == 200) {
                 [kMainWindow showWarning:@"成功开启一键求助"];
+                [UserManager sharedManager].user.staff.seekHelp = YES;
                 //开启一键求助
 //                [[HelpSocketManager sharedSocket] connectServerWithAdress:socketAdress andPort:helpSocketPoet];
                 

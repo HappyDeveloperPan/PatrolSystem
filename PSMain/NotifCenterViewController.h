@@ -10,4 +10,5 @@
 
 @interface NotifCenterViewController : UIViewController
 @property (nonatomic, assign) NSInteger notiNumber;
+@property (nonatomic, assign) int topHeight;
 @end

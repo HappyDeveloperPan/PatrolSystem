@@ -15,6 +15,8 @@
 
 @end
 
+#define kMenuHeight 40
+
 @implementation PageViewController
 #pragma mark - Life Circle
 - (void)viewDidLoad {
@@ -25,7 +27,7 @@
     self.titleColorNormal = kColorMajor;
     self.titleColorSelected = kColorMain;
     //设置高度
-    self.menuHeight = 40;
+    self.menuHeight = kMenuHeight;
     //设置横线风格
     self.menuViewStyle = WMMenuViewStyleLine;
     self.titleSizeSelected = 15;
@@ -61,10 +63,12 @@
 - (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index{
     if (index == 0) {
         NotifCenterViewController *jumpVc = [[NotifCenterViewController alloc] init];
+        jumpVc.topHeight = kMenuHeight;
         return jumpVc;
     }
     if (index == 1) {
         HelpInfoViewController *jumpVc = [[HelpInfoViewController alloc] init];
+        jumpVc.topHeight = kMenuHeight;
         jumpVc.infoType = HelpInfo;
         return jumpVc;
     }

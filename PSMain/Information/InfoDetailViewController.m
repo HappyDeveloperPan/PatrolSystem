@@ -132,6 +132,7 @@
                 [kMainWindow showWarning:@"结束成功"];
                 [self.finishHelpView close];
                 [self.navigationController popViewControllerAnimated:YES];
+                [UserManager sharedManager].user.staff.seekHelp = NO;
 //                [[HelpSocketManager sharedSocket] disconnectedSocket];
             }else {
                 [kMainWindow showWarning:jsonData[@"cause"]];

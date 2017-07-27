@@ -24,4 +24,11 @@
 @property (nonatomic, assign) int ferry_push_record_state_id;
 @property (nonatomic, assign) int ferry_push_record_id;
 
+//游船
+@property (nonatomic, assign) int cruise_line_id;
+@property (nonatomic, copy) NSString *departure_time;  //任务申请时间
+@property (nonatomic, assign) int the_boat_circulation_records_id;
+@property (nonatomic, assign) int choose_pleasure_boat_id;
+@property (nonatomic, assign) int boarding_number;  //开船人数
+@property (nonatomic, assign) int the_boat_circulation_records_state_id;
 @end

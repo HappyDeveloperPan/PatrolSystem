@@ -9,5 +9,7 @@
 #import "CruiseModel.h"
 
 @implementation CruiseModel
-
++ (NSDictionary *)objClassInArray {
+    return @{@"cruiseLineLatlngs":[CoordinateModel class]};
+}
 @end

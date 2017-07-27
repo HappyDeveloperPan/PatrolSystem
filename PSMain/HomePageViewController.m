@@ -345,16 +345,16 @@
         if (self.workType == 4) {
             NSMutableArray * indexes = [NSMutableArray array];
             NSInteger count = 0;
-            if ([UserManager sharedManager].cruiseModel.cruiseLine.cruise_line.count > 0)
+            if ([UserManager sharedManager].cruiseModel.cruiseLineLatlngs.count > 0)
             {
-                count = [UserManager sharedManager].cruiseModel.cruiseLine.cruise_line.count;
+                count = [UserManager sharedManager].cruiseModel.cruiseLineLatlngs.count;
                 self.runningCoords = (CLLocationCoordinate2D *)malloc(count * sizeof(CLLocationCoordinate2D));
                 
                 for (int i = 0; i < count; i++)
                 {
                     @autoreleasepool
                     {
-                        CoordinateModel *coor = [UserManager sharedManager].cruiseModel.cruiseLine.cruise_line[i];
+                        CoordinateModel *coor = [UserManager sharedManager].cruiseModel.cruiseLineLatlngs[i];
                         self.runningCoords[i].latitude = coor.lat;
                         self.runningCoords[i].longitude = coor.lng;
                         

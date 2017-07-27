@@ -18,4 +18,8 @@
 @property (nonatomic, assign) int ferry_push_line_id;
 @property (nonatomic, copy) NSString *ferry_push_line_name;
 
+//游船
+@property (nonatomic, assign) int cruise_line_id;
+@property (nonatomic, copy) NSString *cruise_line_name;
+
 @end

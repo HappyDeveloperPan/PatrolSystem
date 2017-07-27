@@ -27,6 +27,7 @@
 #import "UserManager.h"       //用户管理类
 #import "LocationManager.h"  //定位管理类
 #import "HelpSocketManager.h" //一键求助socket管理类
+#import "WarningManager.h"   //闪烁管理类
 
 #import "NSData+Extension.h"
 #import <AFNetworking.h>

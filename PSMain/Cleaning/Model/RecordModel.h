@@ -16,4 +16,12 @@
 @property (nonatomic, assign) int cleaning_area_id;
 @property (nonatomic, assign) int staff_id;
 @property (nonatomic, assign) int cleaning_records_state_id;
+
+//摆渡车
+@property (nonatomic, assign) int choose_shuttle_buses_id;
+@property (nonatomic, assign) int ferry_push_line_id;
+@property (nonatomic, copy) NSString *start_time;
+@property (nonatomic, assign) int ferry_push_record_state_id;
+@property (nonatomic, assign) int ferry_push_record_id;
+
 @end

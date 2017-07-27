@@ -13,4 +13,9 @@
 @property (nonatomic, copy) NSString *cleaning_area_name;
 @property (nonatomic, assign) NSInteger cleaning_area_id;   //范围id
 @property (nonatomic, assign) NSInteger cleaning_area_limit_id; //规则id
+
+//摆渡车
+@property (nonatomic, assign) int ferry_push_line_id;
+@property (nonatomic, copy) NSString *ferry_push_line_name;
+
 @end

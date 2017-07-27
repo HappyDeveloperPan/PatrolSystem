@@ -218,6 +218,7 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
     
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
+//        [[WarningManager shareManager] startScreenFlicker];
         NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
     }
     else {

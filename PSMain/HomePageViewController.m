@@ -320,16 +320,16 @@
         if (self.workType == 3) {
             NSMutableArray * indexes = [NSMutableArray array];
             NSInteger count = 0;
-            if ([UserManager sharedManager].shuttleBusTaskModel.feeryPushLine.ferry_push_line.count > 0)
+            if ([UserManager sharedManager].shuttleBusTaskModel.ferryPushLineLatlngs.count > 0)
             {
-                count = [UserManager sharedManager].shuttleBusTaskModel.feeryPushLine.ferry_push_line.count;
+                count = [UserManager sharedManager].shuttleBusTaskModel.ferryPushLineLatlngs.count;
                 self.runningCoords = (CLLocationCoordinate2D *)malloc(count * sizeof(CLLocationCoordinate2D));
                 
                 for (int i = 0; i < count; i++)
                 {
                     @autoreleasepool
                     {
-                        CoordinateModel *coor = [UserManager sharedManager].shuttleBusTaskModel.feeryPushLine.ferry_push_line[i];
+                        CoordinateModel *coor = [UserManager sharedManager].shuttleBusTaskModel.ferryPushLineLatlngs[i];
                         self.runningCoords[i].latitude = coor.lat;
                         self.runningCoords[i].longitude = coor.lng;
                         
@@ -592,8 +592,8 @@
                         //摆渡车
                         if (self.workType == 3) {
                             ShuttleBusLineModel *lineModel = [ShuttleBusLineModel parse:model];
-                            [self.pickArr addObject:lineModel.ferry_push_line_name];
-                            [self.lineIdArr addObject:lineModel.ferry_push_line_id];
+                            [self.pickArr addObject:lineModel.feeryPushLine.ferry_push_line_name];
+                            [self.lineIdArr addObject:[NSNumber numberWithInt:lineModel.feeryPushLine.ferry_push_line_id]];
                         }
                         //游船
                         if (self.workType == 4) {

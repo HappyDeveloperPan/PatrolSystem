@@ -9,5 +9,7 @@
 #import "ShuttleBusTaskModel.h"
 
 @implementation ShuttleBusTaskModel
-
++ (NSDictionary *)objClassInArray {
+    return @{@"ferryPushLineLatlngs":[CoordinateModel class]};
+}
 @end

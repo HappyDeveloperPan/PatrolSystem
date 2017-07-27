@@ -10,6 +10,6 @@
 
 @implementation ShuttleBusLineModel
 + (NSDictionary *)objectClassInArray{
-    return @{@"ferry_push_line" : [CoordinateModel class]};
+    return @{@"ferry_push_line" : [CoordinateModel class], @"ferryPushLineLatlngs":[CoordinateModel class]};
 }
 @end

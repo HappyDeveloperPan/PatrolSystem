@@ -70,6 +70,7 @@
     
     [kNotificationCenter addObserver:self selector:@selector(getSelectedTask) name:kReloadInfo object:nil];
     [kNotificationCenter addObserver:self selector:@selector(socketReturnData:) name:kSocketData object:nil];
+    [kNotificationCenter addObserver:self selector:@selector(showRedBadge) name:kShowRedBadge object:nil];
 //    [kNotificationCenter addObserver:self selector:@selector(helpSocketReturnData:) name:kHelpSocketData object:nil];
     
 }
@@ -87,6 +88,10 @@
 }
 
 #pragma mark - Method
+-(void)showRedBadge {
+    [Common layoutBadge:self.badgeLab andCount:[UIApplication sharedApplication].applicationIconBadgeNumber];
+}
+
 //根据工种加载视图
 - (void)showStaffInformationView {
     [self startTaskBtn];
@@ -270,16 +275,16 @@
             //    _speedColors = [NSMutableArray array];
             NSMutableArray * indexes = [NSMutableArray array];
             NSInteger count = 0;
-            if ([UserManager sharedManager].securityModel.theSecurityLine.the_security_line.count > 0)
+            if ([UserManager sharedManager].securityModel.theSecurityLineLatlngs.count > 0)
             {
-                count = [UserManager sharedManager].securityModel.theSecurityLine.the_security_line.count;
+                count = [UserManager sharedManager].securityModel.theSecurityLineLatlngs.count;
                 self.runningCoords = (CLLocationCoordinate2D *)malloc(count * sizeof(CLLocationCoordinate2D));
                 
                 for (int i = 0; i < count; i++)
                 {
                     @autoreleasepool
                     {
-                        CoordinateModel *coor = [UserManager sharedManager].securityModel.theSecurityLine.the_security_line[i];
+                        CoordinateModel *coor = [UserManager sharedManager].securityModel.theSecurityLineLatlngs[i];
                         self.runningCoords[i].latitude = coor.lat;
                         self.runningCoords[i].longitude = coor.lng;
                         
@@ -378,17 +383,17 @@
             if (self.workType == 1) {
                 id  jsonData = [NSJSONSerialization JSONObjectWithData:notif.object options:NSJSONReadingAllowFragments error:nil];
                 SecuritySocketModel *socketModel = [SecuritySocketModel parse:jsonData[@"result"]];
-                if ((!self.securityReportView.isShow) && socketModel.isAccomplish) {
+                if ((!self.securityReportView.isShow) && socketModel.enough_time) {
                     //显示提交任务界面
                     self.securityReportView.isShow = YES;
                     self.securityReportView.top = 100;
                     [self.addView addSubview:self.securityReportView];
                     [self.addView show];
                 }
-                if (!socketModel.isAccomplish) {
+                if (!socketModel.enough_time) {
                     self.securityReportView.isShow = NO;
                 }
-                if (socketModel.isComplete) {
+                if (socketModel.complete) {
                     //任务完成, 断开TCP
                     //                    [[SocketManager sharedSocket] disconnectedSocket];
                     NSMutableDictionary *params = [NSMutableDictionary new];
@@ -576,9 +581,12 @@
                     for (id  model in jsonData[@"result"]) {
                         //安保
                         if (self.workType == 1) {
-                            self.lineModel = [LineModel parse:model];
-                            [self.pickArr addObject:self.lineModel.the_security_line_name];
-                            [self.lineIdArr addObject:self.lineModel.the_security_line_id];
+//                            self.lineModel = [LineModel parse:model];
+//                            [self.pickArr addObject:self.lineModel.the_security_line_name];
+//                            [self.lineIdArr addObject:self.lineModel.the_security_line_id];
+                            SecurityModel *lineModel = [SecurityModel parse:model];
+                            [self.pickArr addObject:lineModel.theSecurityLine.the_security_line_name];
+                            [self.lineIdArr addObject:[NSNumber numberWithInt:lineModel.theSecurityLine.the_security_line_id]];
                         }
                         //保洁
                         if (self.workType == 2) {

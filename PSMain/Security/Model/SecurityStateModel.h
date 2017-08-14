@@ -1,0 +1,15 @@
+//
+//  SecurityStateModel.h
+//  PatrolSystem
+//
+//  Created by 刘艳凯 on 2017/8/1.
+//  Copyright © 2017年 YiTu. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface SecurityStateModel : NSObject
+@property (nonatomic, assign) int security_patrol_record_state_id;
+@property (nonatomic, copy) NSString *security_patrol_record_state_name;
+
+@end

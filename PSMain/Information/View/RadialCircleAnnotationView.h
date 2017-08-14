@@ -8,6 +8,7 @@
 
 #import <MAMapKit/MAMapKit.h>
 #import "HelpModel.h"
+#import "UnusualModel.h"
 
 @interface RadialCircleAnnotationView : MAAnnotationView
 
@@ -23,10 +24,11 @@
 @property (nonatomic, strong) UIView *calloutView;
 @property (nonatomic, strong) UILabel *nameLab, *phoneLab, *reportLab;
 @property (nonatomic, strong) HelpModel *helpModel;
+@property (nonatomic, strong) UnusualModel *unusualModel;
 
 - (void)startPulseAnimation;
 - (void)stopPulseAnimation;
 
 - (void)showHelpStaffData:(HelpModel *)helpModel;
-
+- (void)showUnusualData:(UnusualModel *)unusualModel;
 @end

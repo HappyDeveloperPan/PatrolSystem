@@ -9,5 +9,7 @@
 #import "SecurityModel.h"
 
 @implementation SecurityModel
-
++ (NSDictionary *)objClassInArray {
+    return @{@"theSecurityLineLatlngs":[CoordinateModel class]};
+}
 @end

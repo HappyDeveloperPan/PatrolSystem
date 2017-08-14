@@ -43,6 +43,8 @@ singleton_interface(RXApiServiceEngine)
  @param completionHanlder 完成回调
  */
 + (void)uploadImagesWithUrl:(NSString *)url andImages:(NSArray *)images andParameters:(NSDictionary *)parameters completionHanlder:(CompletionHandler)completionHanlder;
+
+
 /**
  *   发送一个拼接httpbody类型的POST请求,
  *

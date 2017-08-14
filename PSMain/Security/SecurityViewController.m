@@ -150,16 +150,16 @@
         //    _speedColors = [NSMutableArray array];
         NSMutableArray * indexes = [NSMutableArray array];
         NSInteger count = 0;
-        if (self.securityModel.theSecurityLine.the_security_line.count > 0)
+        if (self.securityModel.theSecurityLineLatlngs.count > 0)
         {
-            count = self.securityModel.theSecurityLine.the_security_line.count;
+            count = self.securityModel.theSecurityLineLatlngs.count;
             self.runningCoords = (CLLocationCoordinate2D *)malloc(count * sizeof(CLLocationCoordinate2D));
             
             for (int i = 0; i < count; i++)
             {
                 @autoreleasepool
                 {
-                    CoordinateModel *coor = self.securityModel.theSecurityLine.the_security_line[i];
+                    CoordinateModel *coor = self.securityModel.theSecurityLineLatlngs[i];
                     self.runningCoords[i].latitude = coor.lat;
                     self.runningCoords[i].longitude = coor.lng;
                     
@@ -269,7 +269,7 @@
         [kMainWindow showWarning:@"请先开始任务"];
         return;
     }
-    if (!self.socketModel.isAccomplish) {
+    if (!self.socketModel.enough_time) {
         [kMainWindow showWarning:@"未停留足够长时间"];
         return;
     }

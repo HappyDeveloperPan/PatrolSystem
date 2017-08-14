@@ -13,6 +13,8 @@
 @property (nonatomic, strong) StaffModel *staff;
 @property (nonatomic, copy) NSString *account_token;
 
+@property (nonatomic, assign) NSInteger _j_msgid;
+@property (nonatomic, copy) NSString *type;
 @end
 
 

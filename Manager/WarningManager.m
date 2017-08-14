@@ -18,7 +18,7 @@ void soundCompleteCallback() {
     dispatch_time_t myTime = dispatch_time(DISPATCH_TIME_NOW, 1ull *NSEC_PER_SEC);
     dispatch_after(myTime, dispatch_get_main_queue(), ^{
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);  //震动
-        AudioServicesPlaySystemSound(1007);  // 播放系统声音
+//        AudioServicesPlaySystemSound(1007);  // 播放系统声音
     });
 }
 
@@ -46,9 +46,13 @@ void soundCompleteCallback() {
     
     AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, soundCompleteCallback, NULL);
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-    AudioServicesPlaySystemSound(1007);
+//    AudioServicesPlaySystemSound(1007);
     
     [self redFlicker];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"收到一键求助任务" message:@"请前去处理" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil];
+    
+    [alertView show];
 }
 
 //红光闪烁
@@ -74,10 +78,17 @@ void soundCompleteCallback() {
     [self.redView removeFromSuperview];
     
     AudioServicesDisposeSystemSoundID(kSystemSoundID_Vibrate);
-    AudioServicesDisposeSystemSoundID(1007);
-    AudioServicesRemoveSystemSoundCompletion(1007);
+//    AudioServicesDisposeSystemSoundID(1007);
+//    AudioServicesRemoveSystemSoundCompletion(1007);
     AudioServicesRemoveSystemSoundCompletion(kSystemSoundID_Vibrate);
     
+}
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self endScreenFlicker];
+    }
 }
 
 

@@ -13,6 +13,7 @@
 #import "RadialCircleAnnotationView.h"
 #import "StaffAnnotationView.h"
 #import "HelpModel.h"
+#import "UnusualModel.h"
 #import "FinishHelpView.h"
 #import "HandleResultViewController.h"
 
@@ -20,6 +21,7 @@
 @property (nonatomic, strong) MAMapView *mapView;
 @property (nonatomic, strong) MAPointAnnotation *redAnnotation;
 @property (nonatomic, strong) HelpModel *helpModel;
+@property (nonatomic, strong) UnusualModel *unusualModel;
 @property (nonatomic, strong) UIButton *resultBtn, *finishBtn;
 @property (nonatomic, strong) GCDAsyncSocket *asyncSocket;
 @property (nonatomic, strong) NSTimer *sendMessageTimer;    //心跳定时器
@@ -40,7 +42,7 @@
 //    [self finishBtn];
     
     
-    [self detailInfomation];
+//    [self detailInfomation];
     
     
 }
@@ -48,6 +50,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self detailInfomation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -59,33 +66,76 @@
 //获取详细信息
 - (void)detailInfomation {
     NSMutableDictionary *params = [NSMutableDictionary new];
+    NSString *url;
     params[@"account_token"] = [UserManager sharedManager].user.account_token;
-    params[@"emergency_calling_id"] = [NSString stringWithFormat:@"%ld", (long)self.emergency_calling_id];
-    [RXApiServiceEngine requestWithType:RequestMethodTypePost url:kUrl_StaffHelpDetail parameters:params completionHanlder:^(id jsonData, NSError *error) {
+    if (self.emergency_calling_id) {
+        params[@"emergency_calling_id"] = [NSString stringWithFormat:@"%ld", (long)self.emergency_calling_id];
+        url = kUrl_StaffHelpDetail;
+    }
+    if (self.nowLocationdId) {
+        params[@"nowLocationdId"] = [NSString stringWithFormat:@"%d", self.nowLocationdId];
+        url = kUrl_StaffUnusualDetail;
+    }
+    
+    [RXApiServiceEngine requestWithType:RequestMethodTypePost url:url parameters:params completionHanlder:^(id jsonData, NSError *error) {
         if (jsonData) {
             if ([jsonData[@"resultnumber"] intValue] == 200) {
                 //一键求助
-                self.helpModel = [HelpModel parse:jsonData[@"result"]];
-                // 1.未处理 2.正在处理 3.处理完成 4.撤销 5.已过期
-                if (self.helpModel.emergencyCallingType.emergency_calling_type_id == 2 || self.helpModel.emergencyCallingType.emergency_calling_type_id == 3) {
-                    //处理结果按钮
-                    [self resultBtn];
-                }
-                if (self.helpModel.emergencyCallingType.emergency_calling_type_id == 2) {
-                    //结束处理按钮
-                    [self finishBtn];
-                    //求助坐标点
-                    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(self.helpModel.emergencyCalling.lat, self.helpModel.emergencyCalling.lng);
-                    self.redAnnotation = [MAPointAnnotation new];
-                    self.redAnnotation.coordinate = coordinate;
-                    //连接一键求助tcp
-                    [[HelpSocketManager sharedSocket] connectServerWithAdress:socketAdress andPort:helpSocketPoet];
+                if (self.emergency_calling_id) {
+                    self.helpModel = [HelpModel parse:jsonData[@"result"]];
+                    [self.mapView removeAnnotations:self.mapView.annotations];
+                    // 1.未处理 2.正在处理 3.处理完成 4.撤销 5.已过期
+                    if (self.helpModel.emergencyCallingType.emergency_calling_type_id == 2 || self.helpModel.emergencyCallingType.emergency_calling_type_id == 3) {
+                        //处理结果按钮
+                        [self resultBtn];
+                    }
+                    if (self.helpModel.emergencyCallingType.emergency_calling_type_id == 2 && !self.isHelpStaff) {
+                        //结束处理按钮
+                        [self finishBtn];
+                        //求助坐标点
+                        
+                        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(self.helpModel.emergencyCalling.lat, self.helpModel.emergencyCalling.lng);
+                        self.redAnnotation = [MAPointAnnotation new];
+                        self.redAnnotation.coordinate = coordinate;
+                        //连接一键求助tcp
+                        [[HelpSocketManager sharedSocket] connectServerWithAdress:socketAdress andPort:helpSocketPoet];
+                    }else {
+                        //显示求助坐标点
+                        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(self.helpModel.emergencyCalling.lat, self.helpModel.emergencyCalling.lng);
+                        [self showUserPoint:coordinate];
+                    }
                 }else {
-                    //显示求助坐标点
-                    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(self.helpModel.emergencyCalling.lat, self.helpModel.emergencyCalling.lng);
-                    [self showUserPoint:coordinate];
+                    //景点异常
+                    self.unusualModel = [UnusualModel parse:jsonData[@"result"]];
+                    //3.未处理 4.正在处理 5.已处理 6.已过期
+                    if (self.unusualModel.nowLocationdIdState.nowLocationdId_state_id == 4 && !self.isHelpStaff) {
+                        [self finishBtn];
+                    }
+                    if (self.unusualModel.nowLocationdIdState.nowLocationdId_state_id == 4 || self.unusualModel.nowLocationdIdState.nowLocationdId_state_id == 5) {
+                        [self resultBtn];
+                    }
+                    /****************/
+                    [self.mapView removeAnnotations:self.mapView.annotations];
+                    NSMutableArray *annotationArr = [NSMutableArray new];
+                    if (self.unusualModel.auxiliaryStaffs.count > 0 && self.unusualModel.nowLocationdIdState.nowLocationdId_state_id == 4) {
+                        
+                        for (StaffOnLineModel *staffModel in self.unusualModel.auxiliaryStaffs) {
+                            if (staffModel.onLine) {
+                                CustomAnnotation *annotation = [CustomAnnotation new];
+                                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(staffModel.latLng.lat, staffModel.latLng.lng);
+                                annotation.coordinate = coordinate;
+                                annotation.staffModel = staffModel;
+                                [annotationArr addObject:annotation];
+                            }
+                        }
+                    }
+                    MAPointAnnotation *annotation = [MAPointAnnotation new];
+                    annotation.coordinate = CLLocationCoordinate2DMake(self.unusualModel.nowLocationds.lat, self.unusualModel.nowLocationds.lng);
+                    [annotationArr addObject:annotation];
+                    [self.mapView addAnnotations:annotationArr];
+                    [self.mapView showAnnotations:annotationArr edgePadding:UIEdgeInsetsMake(200, 200, 200, 200) animated:YES];
+                    /*******************/
                 }
-                
             }else {
                 [self.view showWarning:jsonData[@"cause"]];
             }
@@ -107,7 +157,14 @@
 //查看处理结果
 - (void)showHandleResult {
     HandleResultViewController *pushVc = [HandleResultViewController new];
-    pushVc.helpModel = self.helpModel;
+    if (self.emergency_calling_id) {
+        pushVc.infoType = HelpInfo;
+        pushVc.helpModel = self.helpModel;
+    }
+    if (self.nowLocationdId) {
+        pushVc.infoType = UnusualInfo;
+        pushVc.unusualModel = self.unusualModel;
+    }
     [self.navigationController pushViewController:pushVc animated:YES];
 }
 
@@ -123,16 +180,28 @@
     }
     [kMainWindow showBusyHUD];
     NSMutableDictionary *params = [NSMutableDictionary new];
+    NSString *url;
     params[@"account_token"] = [UserManager sharedManager].user.account_token;
-    params[@"summarize"] = textStr;
-    [RXApiServiceEngine requestWithType:RequestMethodTypePost url:kUrl_StaffHelpFinish parameters:params completionHanlder:^(id jsonData, NSError *error) {
+    if (self.emergency_calling_id) {
+        params[@"summarize"] = textStr;
+        url = kUrl_StaffHelpFinish;
+    }
+    if (self.nowLocationdId) {
+        params[@"nowLocationdId"] = @(self.nowLocationdId);
+        params[@"conclusion"] = textStr;
+        url = kUrl_FinishUnusual;
+    }
+    
+    [RXApiServiceEngine requestWithType:RequestMethodTypePost url:url parameters:params completionHanlder:^(id jsonData, NSError *error) {
         [kMainWindow hideBusyHUD];
         if (jsonData) {
             if ([jsonData[@"resultnumber"] intValue] == 200) {
                 [kMainWindow showWarning:@"结束成功"];
                 [self.finishHelpView close];
                 [self.navigationController popViewControllerAnimated:YES];
-                [UserManager sharedManager].user.staff.seekHelp = NO;
+                if (self.emergency_calling_id) {
+                    [UserManager sharedManager].user.staff.seekHelp = NO;
+                }
 //                [[HelpSocketManager sharedSocket] disconnectedSocket];
             }else {
                 [kMainWindow showWarning:jsonData[@"cause"]];
@@ -271,7 +340,12 @@
             annotationView.calloutOffset = CGPointMake(0, -5);
             //设置弹出框数据
             //一键求助
-            annotationView.helpModel = self.helpModel;
+            if (self.emergency_calling_id) {
+                annotationView.helpModel = self.helpModel;
+            }
+            if (self.nowLocationdId) {
+                annotationView.unusualModel = self.unusualModel;
+            }
 
             //脉冲圈个数
             annotationView.pulseCount = 4;
@@ -422,6 +496,13 @@
         _helpModel = [HelpModel new];
     }
     return _helpModel;
+}
+
+- (UnusualModel *)unusualModel {
+    if (!_unusualModel) {
+        _unusualModel = [UnusualModel new];
+    }
+    return _unusualModel;
 }
 
 - (GCDAsyncSocket *)asyncSocket {

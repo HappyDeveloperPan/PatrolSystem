@@ -59,7 +59,7 @@
     self.titleLab.text = notiModel.title;;
     self.contentLab.text = notiModel.push_time;
     self.timeLab.text = notiModel.alert;
-    if ([notiModel.push_attach_data.type isEqualToString:@"emergencyCallingDisposeStaffPush"]) {
+    if ([notiModel.push_attach_data.type isEqualToString:@"emergencyCallingDisposeStaffPush"] || [notiModel.push_attach_data.type isEqualToString:@"nowLocationdAuxiliaryStaffPush"]) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 }

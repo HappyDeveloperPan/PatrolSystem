@@ -226,7 +226,13 @@
             self.scrollView.contentSize = CGSizeMake(introduceLab.width, introduceLab.height);
             [self.calloutView addSubview:self.scrollView];
             //图片
-            [self showHelpStaffData:self.helpModel];
+//            [self showHelpStaffData:self.helpModel];
+            if (self.helpModel) {
+                [self showHelpStaffData:self.helpModel];
+            }
+            if (self.unusualModel) {
+                [self showUnusualData:self.unusualModel];
+            }
         }
         [self addSubview:self.calloutView];
     }
@@ -253,10 +259,38 @@
         [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPic:)]];
         imageView.tag = i;
         PicturesModel *picturesModel = helpModel.emergencyCallingPictures[i];
-        [imageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.yituinfo.cn/Patrolling%@",picturesModel.emergency_calling_picture]] placeholder:[UIImage imageNamed:@"default"]];
+        [imageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",picUrl,picturesModel.emergency_calling_picture]] placeholder:[UIImage imageNamed:@"default"]];
         [imageView setMultipleTouchEnabled:YES];
         [self.calloutView addSubview:imageView];
     }
+}
+
+- (void)showUnusualData:(UnusualModel *)unusualModel {
+    self.nameLab.text = [NSString stringWithFormat:@"姓名: %@", unusualModel.staffOnline.staff.staff_name];
+    self.phoneLab.text = [NSString stringWithFormat:@"电话: %@", unusualModel.staffOnline.staff.staff_phone];
+    self.reportLab.text = unusualModel.nowLocationds.report;
+    self.reportLab.numberOfLines = 0;
+    self.reportLab.font = [UIFont systemFontOfSize:14];
+    [self.reportLab sizeToFit];
+    [self.scrollView addSubview:self.reportLab];
+    self.scrollView.contentSize = CGSizeMake(self.reportLab.width, self.reportLab.height);
+    [self.calloutView addSubview:self.scrollView];
+    //图片
+    CGFloat width = (self.calloutView.width - 25) / 3;
+    //    NSArray *imgArr = self.unusualModel.nowLocationdPictures;
+    for (int i=0; i<self.unusualModel.nowLocationdPictures.count; i++) {
+        PicturesModel *picturesModel = self.unusualModel.nowLocationdPictures[i];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake((width)*i + 25, self.scrollView.bottom + 10, 60, 60)];
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.userInteractionEnabled = YES;
+        [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPic:)]];
+        imageView.tag = i;
+        [imageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",picUrl,picturesModel.nowLocationd_picture_url]] placeholder:[UIImage imageNamed:@"default"]];
+        [imageView setMultipleTouchEnabled:YES];
+        [self.calloutView addSubview:imageView];
+    }
+    
 }
 
 

@@ -10,13 +10,17 @@
 #define UrlPath_h
 
 //线上服务器地址
-//#define HostAdress @"http://www.yituinfo.cn/Patrolling/"
+#define HostAdress @"http://www.yituinfo.cn/Patrolling/"
 //本地服务器地址
-#define HostAdress @"http://192.168.100.29/Patrolling/"
+//#define HostAdress @"http://192.168.100.29/Patrolling/"
+
+//图片地址
+#define picUrl @"http://www.yituinfo.cn/Patrolling"
+//#define picUrl @"http://192.168.100.29/Patrolling"
 
 //socket通信地址
-//#define socketAdress @"119.23.251.169"
-#define socketAdress @"192.168.100.29"
+#define socketAdress @"119.23.251.169"
+//#define socketAdress @"192.168.100.29"
 #define socketPort 8888
 #define helpSocketPoet 8889 
 //查看错误编码
@@ -66,6 +70,9 @@
 #define kUrl_StaffHelpList              ConvertUrl(@"interface/mobile/query/queryEmergencyCalling.do")             //用户求助记录列表
 #define kUrl_StaffHelpDetail            ConvertUrl(@"interface/mobile/query/getEmergencyCallingInfo.do")           //获取求助详细信息
 #define kUrl_StaffHelpFinish            ConvertUrl(@"interface/mobile/update/accomplishEmergencyCalling.do")       //完成一键求助
+#define kUrl_StaffUnusualList           ConvertUrl(@"interface/mobile/query/queryAbnormalNowLocationd.do")         //巡逻异常列表
+#define kUrl_StaffUnusualDetail        ConvertUrl(@"interface/mobile/query/getNowLocationdsInfo.do")               //巡逻异常详细信息
+#define kUrl_FinishUnusual              ConvertUrl(@"interface/mobile/update/accomplishNowLocationds.do")          //完成巡逻异常
 #endif /* UrlPath_h */
 
 

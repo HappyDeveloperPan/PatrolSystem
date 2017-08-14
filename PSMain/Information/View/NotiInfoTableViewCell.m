@@ -86,20 +86,34 @@
     }
     [attriStr addAttributes:@{NSForegroundColorAttributeName:color} range:[str rangeOfString:model.emergency_calling_type]];
     self.isCompleteLb.attributedText = attriStr;
+}
+
+- (void)setUnusualCellData:(UnusualModel *)model {
+    self.nameLb.text = [NSString stringWithFormat:@"求助者: %@", model.staff.staff_name];
+    self.phoneLb.text = [NSString stringWithFormat:@"电话: %@", model.staff.staff_phone];
+    self.timeLb.text = model.nowLocationds.completion_time;
+    NSString *str = [NSString stringWithFormat:@"状态: %@", model.nowLocationdIdState.nowLocationdId_state_name];
+    NSMutableAttributedString *attriStr = [[NSMutableAttributedString alloc] initWithString:str];
+    UIColor *color;
+    switch (model.nowLocationdIdState.nowLocationdId_state_id) {
+        case 3: //未处理
+            color = [UIColor redColor];
+            break;
+        case 4: //正在处理
+            color = RGBColor(248, 200, 3);
+            break;
+        case 5: //处理完成
+            color = kColorGreen;
+            break;
+        case 6: //已过期
+            color = [UIColor redColor];
+            break;
+        default:
+            break;
+    }
+    [attriStr addAttributes:@{NSForegroundColorAttributeName:color} range:[str rangeOfString:model.nowLocationdIdState.nowLocationdId_state_name]];
+    self.isCompleteLb.attributedText = attriStr;
     
-//    if (model.isHandle && model.isComplete) {
-//        self.handleBtn.hidden = YES;
-//    }
-//    if (model.isHandle && !model.isComplete) {
-//        self.handleBtn.hidden = NO;
-//        [self.handleBtn setTitle:@"完成处理" forState:UIControlStateNormal];
-//        self.handleBtn.backgroundColor = kColorMain;
-//    }
-//    if (!model.isHandle) {
-//        self.handleBtn.hidden = NO;
-//        [self.handleBtn setTitle:@"处理" forState:UIControlStateNormal];
-//        self.handleBtn.backgroundColor = KcolorRed;
-//    }
 }
 
 //- (void)handleHelpStateWithModel:(DetailInfoModel *)model {

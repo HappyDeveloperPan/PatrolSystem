@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WarningManager : NSObject
+@interface WarningManager : NSObject<UIAlertViewDelegate>
 @property (nonatomic, strong) UIView *redView;
 @property (nonatomic, strong) NSTimer *twinkleTime;
 @property (nonatomic, copy) NSData *returnData;

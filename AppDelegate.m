@@ -218,7 +218,11 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
     
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
-//        [[WarningManager shareManager] startScreenFlicker];
+        [kNotificationCenter postNotificationName:kShowRedBadge object:nil];
+        PSUser *model = [PSUser parse:userInfo];
+        if ([model.type isEqualToString:@"emergencyCallingDisposeStaffPush"]) {
+            [[WarningManager shareManager] startScreenFlicker];
+        }
         NSLog(@"iOS10 前台收到远程通知:%@", [self logDic:userInfo]);
     }
     else {
@@ -242,6 +246,11 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
+        [kNotificationCenter postNotificationName:kShowRedBadge object:nil];
+        PSUser *model = [PSUser parse:userInfo];
+        if ([model.type isEqualToString:@"emergencyCallingDisposeStaffPush"]) {
+            [[WarningManager shareManager] startScreenFlicker];
+        }
         NSLog(@"iOS10 收到远程通知:%@", [self logDic:userInfo]);
     }
     else {

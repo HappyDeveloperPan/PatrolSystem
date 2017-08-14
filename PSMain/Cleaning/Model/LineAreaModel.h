@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface LineAreaModel : NSObject
+//安保
+@property (nonatomic, assign) int the_security_line_id;
+@property (nonatomic, copy) NSString *the_security_line_name;
+
 //保洁
 @property (nonatomic, copy) NSString *cleaning_area_name;
 @property (nonatomic, assign) NSInteger cleaning_area_id;   //范围id

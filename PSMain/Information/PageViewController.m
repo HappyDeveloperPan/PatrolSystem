@@ -50,7 +50,11 @@
 
 //重写父类的titiles属性的getter方法, 设置题目
 - (NSArray<NSString *> *)titles{
-    return @[@"工作信息", @"一键求助"];
+    if ([UserManager sharedManager].user.staff.type_of_work_id == 1) {
+        return @[@"工作信息",@"一键求助",@"安保异常"];
+    }else {
+        return @[@"工作信息", @"一键求助"];
+    }
 }
 
 
@@ -70,6 +74,12 @@
         HelpInfoViewController *jumpVc = [[HelpInfoViewController alloc] init];
         jumpVc.topHeight = kMenuHeight;
         jumpVc.infoType = HelpInfo;
+        return jumpVc;
+    }
+    if (index == 2) {
+        HelpInfoViewController *jumpVc = [[HelpInfoViewController alloc] init];
+        jumpVc.topHeight = kMenuHeight;
+        jumpVc.infoType = UnusualInfo;
         return jumpVc;
     }
 //    ScenicShowDetailViewController *jumpVC = [[ScenicShowDetailViewController alloc] init];

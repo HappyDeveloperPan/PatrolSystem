@@ -96,9 +96,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NotifModel *model = self.notiArr[indexPath.row];
+    //被派遣去一键求助
     if ([model.push_attach_data.type isEqualToString:@"emergencyCallingDisposeStaffPush"]) {
         InfoDetailViewController *pushVc = [InfoDetailViewController new];
         pushVc.emergency_calling_id = model.push_attach_data.spid;
+        pushVc.isHelpStaff = YES;
+        [self.navigationController pushViewController:pushVc animated:YES];
+    }
+    //被派遣去安保异常
+    if ([model.push_attach_data.type isEqualToString:@"nowLocationdAuxiliaryStaffPush"]) {
+        InfoDetailViewController *pushVc = [InfoDetailViewController new];
+        pushVc.nowLocationdId = (short)model.push_attach_data.spid;
+        pushVc.isHelpStaff = YES;
         [self.navigationController pushViewController:pushVc animated:YES];
     }
 }

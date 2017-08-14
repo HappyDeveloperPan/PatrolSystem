@@ -13,8 +13,8 @@
 @property (nonatomic, copy) NSString *entryTime;
 @property (nonatomic, copy) NSString *outTime;
 @property (nonatomic, strong) CoordinateModel *coordinateScope;
-@property (nonatomic, assign) BOOL isEnter;
-@property (nonatomic, assign) BOOL isAccomplish;  //是否完成当前任务
-@property (nonatomic, assign) BOOL isUpload;    //是否上传任务
-@property (nonatomic, assign) BOOL isComplete; //任务是否全部完成,断开TCP
+@property (nonatomic, assign) BOOL enter; //是否进入巡逻点
+@property (nonatomic, assign) BOOL enough_time;  //是否停留足够长的时间
+@property (nonatomic, assign) BOOL upload;    //是否上传任务
+@property (nonatomic, assign) BOOL complete; //任务是否全部完成,断开TCP
 @end

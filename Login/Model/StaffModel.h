@@ -24,11 +24,13 @@
 @property (nonatomic, assign) BOOL task;    //是否选择任务
 @property (nonatomic, assign) BOOL workTools;   //是否选择任务工具
 @property (nonatomic, assign) BOOL seekHelp;    //是否开启一键求助
+//一键求助
 @property (nonatomic, assign) NSInteger emergency_calling_id; //求助id
 @property (nonatomic, copy) NSString *start_time; //开始求助时间
 @property (nonatomic, copy) NSString *origin;  //求助原因
 @property (nonatomic, assign) NSInteger emergency_calling_type_id; //求助状态id
 @property (nonatomic, copy) NSString *emergency_calling_type;  //求助状态名称
+//安保异常
 
 - (NSString *)workType;
 @end

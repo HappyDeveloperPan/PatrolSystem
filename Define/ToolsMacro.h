@@ -116,6 +116,7 @@
 #define kSaveToken                   @"userToken"
 #define kReloadInfo                  @"reloadInfo"
 #define KNotifShowTask              @"showTask"
+#define kShowRedBadge               @"showRedBadge"
 
 /****/
 #define kNotifPopVC                 @"popVC"

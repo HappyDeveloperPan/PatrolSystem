@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface RecordModel : NSObject
+//安保
+@property (nonatomic, assign) int security_patrol_record_state_id;
+@property (nonatomic, assign) int the_security_line_id;
+@property (nonatomic, copy) NSString *security_patrol_start_time;
+@property (nonatomic, assign) int security_patrol_record_id;
+
 //保洁
 @property (nonatomic, copy) NSString *cleaning_the_start_time;
 @property (nonatomic, copy) NSString *cleaning_the_end_time;

@@ -10,6 +10,7 @@
 #import "NotiInfoTableViewCell.h"
 #import "HelpModel.h"
 #import "InfoDetailViewController.h"
+#import "UnusualModel.h"
 
 @interface HelpInfoViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -79,6 +80,9 @@ typedef NS_ENUM(NSUInteger, HandleMode) {
     if (self.infoType == HelpInfo) {
         url = kUrl_StaffHelpList;
     }
+    if (self.infoType == UnusualInfo) {
+        url = kUrl_StaffUnusualList;
+    }
     [RXApiServiceEngine requestWithType:RequestMethodTypePost url:url parameters:params completionHanlder:^(id jsonData, NSError *error) {
         if (jsonData) {
             if ([jsonData[@"resultnumber"] intValue] == 200) {
@@ -87,7 +91,13 @@ typedef NS_ENUM(NSUInteger, HandleMode) {
                         StaffModel *staffModel = [StaffModel parse:model];
                         [self.notiArr addObject:staffModel];
                     }
-                }                
+                }
+                if (self.infoType == UnusualInfo) {
+                    for (id model in jsonData[@"result"]) {
+                        UnusualModel *staffModel = [UnusualModel parse:model];
+                        [self.notiArr addObject:staffModel];
+                    }
+                }
                 [self.tableView reloadData];
             }else {
                 [self.view showWarning:jsonData[@"cause"]];
@@ -129,13 +139,23 @@ typedef NS_ENUM(NSUInteger, HandleMode) {
         StaffModel *staffModel = self.notiArr[indexPath.row];
         [cell setHelpCellData:staffModel];
     }
+    if (self.infoType == UnusualInfo) {
+        UnusualModel *staffModel = self.notiArr[indexPath.row];
+        [cell setUnusualCellData:staffModel];
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     InfoDetailViewController *pushVc = [InfoDetailViewController new];
-    StaffModel *staffModel = self.notiArr[indexPath.row];
-    pushVc.emergency_calling_id = staffModel.emergency_calling_id;
+    if (self.infoType == HelpInfo) {
+        StaffModel *staffModel = self.notiArr[indexPath.row];
+        pushVc.emergency_calling_id = staffModel.emergency_calling_id;
+    }
+    if (self.infoType == UnusualInfo) {
+        UnusualModel *staffModel = self.notiArr[indexPath.row];
+        pushVc.nowLocationdId = staffModel.nowLocationds.nowLocationdId;
+    }
     [self.navigationController pushViewController:pushVc animated:YES];
 }
 

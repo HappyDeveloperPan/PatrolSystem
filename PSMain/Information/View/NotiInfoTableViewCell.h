@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "StaffModel.h"
+#import "UnusualModel.h"
 
 @interface NotiInfoTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *redPoint;
@@ -21,6 +22,7 @@
 //@property (nonatomic, copy) void (^handleBtnBlock)();
 
 - (void)setHelpCellData:(StaffModel *)model;
+- (void)setUnusualCellData:(UnusualModel *)model;
 
 //- (void)handleHelpStateWithModel:(DetailInfoModel *)model;
 //- (void)handleUnusualStateWithModel: (DetailInfoModel *)model;

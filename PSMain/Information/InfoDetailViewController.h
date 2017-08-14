@@ -10,6 +10,7 @@
 
 @interface InfoDetailViewController : UIViewController
 @property (nonatomic, assign) NSInteger emergency_calling_id;
-//@property (nonatomic, assign) NSInteger nowLocationdId;
+@property (nonatomic, assign) int nowLocationdId;
 //@property (nonatomic, assign) NSInteger emergency_calling_type_id;
+@property (nonatomic, assign) BOOL isHelpStaff; //是否是前去帮助的工作人员
 @end

@@ -2,16 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>申请访问相机权限</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>申请访问相册权限</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>应用需要访问您的位置信息,是否允许</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>应用需要访问您的前台定位信息,是否允许</string>
-	<key>NSLocationUsageDescription</key>
-	<string>应用需要访问您的定位信息,是否允许</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -35,8 +25,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>申请访问相机权限</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>应用需要访问您的位置信息,是否允许</string>
+	<key>NSLocationUsageDescription</key>
+	<string>应用需要访问您的定位信息,是否允许</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>应用需要访问您的前台定位信息,是否允许</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>申请访问相册权限</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

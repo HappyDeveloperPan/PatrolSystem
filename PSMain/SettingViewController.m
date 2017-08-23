@@ -271,9 +271,9 @@
 - (NSArray *)imageArr {
     if (!_imageArr) {
         if (self.workType == 1 || self.workType == 2) {
-            _imageArr = @[@[@"icon_signout",@"icon_like"],@[@"icon_set",@"icon_Collection"]];
+            _imageArr = @[@[@"icon_signout",@"icon_retroactive"],@[@"icon_setting",@"icon_about"]];
         }else {
-            _imageArr = @[@[@"icon_signout",@"icon_like",@"icon_footprint"],@[@"icon_set",@"icon_Collection"]];
+            _imageArr = @[@[@"icon_signout",@"icon_retroactive",@"icon_tools"],@[@"icon_setting",@"icon_about"]];
         }
     }
     return _imageArr;

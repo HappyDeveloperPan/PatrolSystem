@@ -27,7 +27,7 @@
 
     [self imageView];
     [self versionNumberLab];
-    [self tableView];
+//    [self tableView];
     [self introduceLab];
 }
 

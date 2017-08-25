@@ -13,6 +13,7 @@
 #import "PSTabBarViewController.h"
 #import "JPUSHService.h"
 #import "SocketManager.h"
+#import "WelcomeViewController.h"
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
@@ -81,9 +82,21 @@ void uncaughtExceptionHandler(NSException* exception)
     manager.shouldResignOnTouchOutside = YES;//这个是点击空白区域键盘收缩的开关
     manager.enableAutoToolbar = NO;//这个是它自带键盘工具条开关
     
-    
-    /*************根据当天是否签到跳转页面********************/
-    [self jumpVcFromSignIn];
+    self.window = [[UIWindow alloc] initWithFrame:kMainScreenFrame];
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    NSString *versionNumber = infoDic[@"CFBundleShortVersionString"];
+    NSLog(@"版本号: %@", versionNumber);
+    NSString *runVersionNumber = [Common getAsynchronousWithKey:kRunVersion];
+    NSLog(@"现有版本号 : %@", runVersionNumber);
+    if (runVersionNumber == nil || ![runVersionNumber isEqualToString:versionNumber]) {
+        WelcomeViewController *welcomeVc = [[WelcomeViewController alloc] init];
+        self.window.rootViewController = welcomeVc;
+    }else {
+        /*************根据当天是否签到跳转页面********************/
+        [self jumpVcFromSignIn];
+//        self.window.rootViewController = [PSTabBarViewController new];
+    }
+    [self.window makeKeyAndVisible];
     
     //自动登录获取用户信息
     [self QuickLogin];
@@ -284,7 +297,7 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
 }
 
 - (void)jumpVcFromSignIn {
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //    NSDictionary *userDic = [Common getAsynchronousWithKey:kSavedUser];
     //    PSUser *user = [PSUser parse:userDic];
     NSString *dateStr = [Common getAsynchronousWithKey:kSignInRecord];
@@ -295,7 +308,7 @@ didReceiveLocalNotification:(UILocalNotification *)notification {
         UINavigationController *loginNav = [[UINavigationController alloc] initWithRootViewController:loginVc];
         self.window.rootViewController = loginNav;
     }
-    [self.window makeKeyAndVisible];
+//    [self.window makeKeyAndVisible];
 }
 
 - (void)QuickLogin {

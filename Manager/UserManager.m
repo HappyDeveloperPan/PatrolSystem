@@ -45,7 +45,12 @@ static UserManager *manager;
     NSMutableDictionary *parameters = [NSMutableDictionary new];
     parameters[@"staff_phone"] = phone;
     parameters[@"staff_password"] = pass;
-    parameters[@"regid"] = [Common getAsynchronousWithKey:kJPushRegisterId];
+    if ([Common getAsynchronousWithKey:kJPushRegisterId]) {
+        parameters[@"regid"] = [Common getAsynchronousWithKey:kJPushRegisterId];
+    }else {
+        parameters[@"regid"] = kJPushRegisterId;
+    }
+    
     
     [RXApiServiceEngine requestWithType:RequestMethodTypePost url:kUrl_Login parameters:parameters completionHanlder:^(id jsonData, NSError *error) {
         if (jsonData && [jsonData[@"resultnumber"] intValue] == 200) {

@@ -110,7 +110,12 @@
     parameters[@"staff_password"] = [Common md5:self.passField.text];;
     parameters[@"registration_code"] = self.invitationCodeField.text;
     parameters[@"appKey"] = kMOBApp;
-    parameters[@"regid"] = [Common getAsynchronousWithKey:kJPushRegisterId];
+    if ([Common getAsynchronousWithKey:kJPushRegisterId]) {
+        parameters[@"regid"] = [Common getAsynchronousWithKey:kJPushRegisterId];
+    }else {
+        parameters[@"regid"] = kJPushRegisterId;
+    }
+    
     
     [RXApiServiceEngine requestWithType:RequestMethodTypePost url:kUrl_Register parameters:parameters completionHanlder:^(id jsonData, NSError *error) {
         if (jsonData) {

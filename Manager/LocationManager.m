@@ -68,9 +68,9 @@ static  LocationManager *manager;
         _locationManager.delegate = self;
         //设置多少米定位一次
         [_locationManager setDistanceFilter:20];
-        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_locationManager requestAlwaysAuthorization];
-        }
+//        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+//            [_locationManager requestAlwaysAuthorization];
+//        }
         if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
             [_locationManager requestWhenInUseAuthorization];
         }

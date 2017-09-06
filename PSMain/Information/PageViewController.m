@@ -23,11 +23,11 @@
 //    [super viewDidLoad];
     self.title = @"通知中心";
     self.view.backgroundColor = kColorBg;
-    self.menuBGColor = kColorWhite;
+//    self.menuBGColor = kColorWhite;
     self.titleColorNormal = kColorMajor;
     self.titleColorSelected = kColorMain;
     //设置高度
-    self.menuHeight = kMenuHeight;
+//    self.menuHeight = kMenuHeight;
     //设置横线风格
     self.menuViewStyle = WMMenuViewStyleLine;
     self.titleSizeSelected = 15;
@@ -59,6 +59,15 @@
 
 
 #pragma mark - WMPage Delegate
+
+- (CGRect)pageController:(WMPageController *)pageController preferredFrameForMenuView:(WMMenuView *)menuView {
+    return CGRectMake(0, 0, kMainScreenWidth, 40);
+}
+
+- (CGRect)pageController:(WMPageController *)pageController preferredFrameForContentView:(WMScrollView *)contentView {
+    return CGRectMake(0, 40, kMainScreenWidth, kMainScreenHeight - 40);
+}
+
 //内部有多少个子视图
 - (NSInteger)numbersOfChildControllersInPageController:(WMPageController *)pageController{
     return self.titles.count;
